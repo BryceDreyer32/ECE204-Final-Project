@@ -53,6 +53,7 @@ module tb_systolic_ctrl;
         rst_n = 1'b1;
         #10;
 
+        // Load test values into the input matrices
         a[0][0] = 8'd4;  a[0][1] = 8'd2;  a[0][2] = 8'd13;
         a[1][0] = 8'd6;  a[1][1] = 8'd11; a[1][2] = 8'd6;
         a[2][0] = 8'd7;  a[2][1] = 8'd8;  a[2][2] = 8'd3;
