@@ -1,17 +1,20 @@
 # TOOLCHAIN
 
-## Linting — Slang (VSCode)
-Extension: "verilog-hdl" by eda-playground, or install slang-server separately
-Provides real-time SystemVerilog linting in VSCode.
-Install: https://github.com/MikePopoloski/slang
+## Linting — slang-server & slang (VSCode)
+* **slang-server:** The Language Server Protocol (LSP) implementation developed by **Hudson River Trading (HRT)**. It runs in the background of your editor to provide real-time, as-you-type SystemVerilog linting, syntax highlighting, and code navigation.
+* **Extension Configuration:** Use the "verilog-hdl" extension by eda-playground, or install `slang-server` separately to bind it to your IDE.
+
+Install: [https://github.com/hudson-trading/slang-server](https://github.com/hudson-trading/slang-server)
 
 ## Simulation — Verilator 5.048
-Used for compiling and simulating the testbench.
-Install: https://verilator.org/guide/latest/install.html
+Used for compiling and simulating the testbench. 
 
-Compile:
-  verilator --binary --timing --trace -sv tb/systolic_array_tb.sv \
-    rtl/pe.sv rtl/systolic_array.sv --top-module systolic_array_tb -o systolic_sim
+Install: [https://verilator.org/guide/latest/install.html](https://verilator.org/guide/latest/install.html)
+
+### Compile:
+```bash
+verilator --binary --timing --trace -sv tb/systolic_array_tb.sv \
+  rtl/pe.sv rtl/systolic_array.sv --top-module systolic_array_tb -o systolic_sim
 
 Run:
   ./obj_dir/systolic_sim
