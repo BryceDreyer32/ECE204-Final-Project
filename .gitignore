@@ -1,0 +1,5 @@
+# Verilator output directories
+obj_dir/
+
+# Waveform dump files
+*.vcd
