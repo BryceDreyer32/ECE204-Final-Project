@@ -1,7 +1,7 @@
 # 8x8 Systolic Array — Output Stationary Matrix Multiplier
 
 ## Waveforms in Surfer
-![Systolic Array Waveforms](images/8x8waveform_simulation.png)
+![Systolic Array Waveforms](images/8x8simulation_waveform.png)
 
 Parameterized 8x8 systolic array in SystemVerilog computing C = A x B. Each processing element accumulates its partial sum in place while both operands stream through, targeting the Terasic DE10-Lite (Intel MAX 10).
 
