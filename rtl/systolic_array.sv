@@ -1,41 +1,36 @@
-module systolic_array (
-    input  logic               clk, rst,
-    input  logic signed [7:0]  a00, a10,
-    input  logic signed [7:0]  b00, b01,
-    output logic signed [31:0] c00, c01, c10, c11
+module systolic_array #(
+    parameter SIZE = 8,
+    parameter WIDTH = 8,
+    parameter ACC_WIDTH = 32
+    ) (
+    input  logic clk, rst,
+    input  logic signed [SIZE - 1:0][WIDTH - 1:0]  a_in,
+    input  logic signed [SIZE - 1:0][WIDTH - 1:0]  b_in,
+    output logic [SIZE - 1:0][SIZE - 1:0][ACC_WIDTH - 1:0] c_out
 );
 
-logic signed [7:0] a_h00;    // a flows right: PE(0,0) -> PE(0,1)
-logic signed [7:0] a_h10;    // a flows right: PE(1,0) -> PE(1,1)
-logic signed [7:0] b_v00;    // b flows down:  PE(0,0) -> PE(1,0)
-logic signed [7:0] b_v01;    // b flows down:  PE(0,1) -> PE(1,1)
+// 3D packed array: [which column/row you're in, a = row, b = column][Which gap between PEs][Width of intermediate wire]
 
-pe instance_00 (.clk(clk), .rst(rst),
-    .a_in(a00), .b_in(b00),
-    .a_out(a_h00), .b_out(b_v00),
-    .acc_out(c00)
+logic signed [SIZE - 1:0][SIZE - 1:0][WIDTH - 1:0] a_hori;    // The rightmost index is treated as width for all packed arrays
+logic signed [SIZE - 1:0][SIZE - 1:0][WIDTH - 1:0] b_vert;
 
-);
+genvar i, j;
+generate
+    for (i = 0; i < SIZE; i++) begin : row
+        for (j = 0; j < SIZE; j++) begin : col
 
-pe instance_01 (.clk(clk), .rst(rst),
-    .a_in(a_h00), .b_in(b01),
-    .a_out(), .b_out(b_v01),            // a_out is an edge of the 2x2 array. There are no pe modules "below it, so the output is a don't care"
-    .acc_out(c01)
+            pe #(.WIDTH(WIDTH)) pe_inst (
+                .clk(clk),
+                .rst(rst),
+                .a_in(j == 0 ? $signed(a_in[i]) : $signed(a_hori[i][j-1])),
+                .b_in(i == 0 ? $signed(b_in[j]) : $signed(b_vert[i-1][j])),
+                .a_out(a_hori[i][j]),    // Slang-server is particularly strict about signedness, but this warning can be ignored since the IO connections here are declaraed as signed values
+                .b_out(b_vert[i][j]),
+                .acc_out(c_out[i][j])    // ^
+            );
 
-);
-
-pe instance_10 (.clk(clk), .rst(rst),
-    .a_in(a10), .b_in(b_v00),
-    .a_out(a_h10), .b_out(),            // b_out is an edge of the 2x2 array. There are no pe modules "below it, so the output is a don't care"
-    .acc_out(c10)
-
-);
-
-pe instance_11 (.clk(clk), .rst(rst),
-    .a_in(a_h10), .b_in(b_v01),
-    .a_out(), .b_out(),                 // Both a_out and_b_out are don't cares. This is the last pe in the array to receive the input matrices
-    .acc_out(c11)
-
-);
+        end
+    end
+endgenerate
 
 endmodule

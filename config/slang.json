@@ -1,0 +1,6 @@
+{
+  "include-dirs": [
+    "rtl/",
+    "tb/"
+  ]
+}
