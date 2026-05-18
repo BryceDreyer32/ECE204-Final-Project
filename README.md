@@ -7,6 +7,25 @@ Parameterized 8x8 systolic array in SystemVerilog computing C = A x B. Each proc
 
 ## Architecture
 
+2D mesh spatial architecture designed for localized matrix-matrix multiplication (i.e. It’s a grid of mini-calculators that pass data to their neighbors). Distributing computation across an array of independent processing nodes achieves both parallelism and decreases memory usage.
+
+### Processing Element
+
+Each PE performs one multiply-accumulate per clock cycle. It receives an 8-bit signed value from the left (`a_in`) and from above (`b_in`), computes their product, and adds it to a 32-bit accumulator (`acc_out`). Both values are passed to the next PE through registered outputs (`a_out`, `b_out`), introducing exactly one cycle of delay per hop.
+
+### Array Topology
+
+64 PEs in an 8x8 grid. Row `i` of A enters at `a_in[i]` and flows right. Column `j` of B enters at `b_in[j]` and flows down. When computation completes, PE[i][j] holds the dot product of row `i` of A with column `j` of B.
+
+### Output Stationary Dataflow
+
+Unlike cloud-scale accelerators like Google's TPU—which utilize a Weight Stationary dataflow—this project implements an **Output Stationary (OS)** dataflow. Following industry-standard spatial hardware architecture taxonomy, an Output Stationary design fixes the accumulator registers inside each Processing Element (PE). The matrix operands (`a_in` and `b_in`) are dynamically streamed through the horizontal and vertical buses of the network.
+
+#### Key Advantages of this Implemented Dataflow:
+* **Zero Partial Sum Movement:** Because the dot-product accumulation happens entirely locally within each PE's internal 32-bit register (`acc_out`), intermediate partial sums never need to be routed across the array. This dramatically cuts down on high-capacitance bus switching power.
+* **Symmetrical Streaming:** This structure treats both input matrices (`a_in` and `b_in`) identically, allowing both datasets to stream continuously without requiring complex "weight pre-loading" cycles before computation can begin.
+* **Bit-Overflow Protection:** Localizing the output allows for a wider, high-precision accumulator register to be cleanly integrated directly within the PE logic without increasing the routing bandwidth of the interconnecting buses.
+
 ### Processing Element
 
 Each PE performs one multiply-accumulate per clock cycle. It receives an 8-bit signed value from the left (`a_in`) and from above (`b_in`), computes their product, and adds it to a 32-bit accumulator (`acc_out`). Both values are passed to the next PE through registered outputs (`a_out`, `b_out`), introducing exactly one cycle of delay per hop.
@@ -19,7 +38,7 @@ Each PE performs one multiply-accumulate per clock cycle. It receives an 8-bit s
 
 Both A and B stream through the array while partial sums accumulate in place. The accumulator never leaves the PE until the full dot product is done, minimizing memory bandwidth for intermediate results. Google's TPU v1 uses this same dataflow.
 
-### Data Flow
+### Data Flow Aanlogy
 
 Feeding the array is equivalent to launching two orthogonal wave pulses: one moving right through rows, one moving down through columns. The PE pipeline registers delay each wavefront by one cycle per hop. A non-zero product accumulates only where both waves arrive at the same PE in the same cycle. For an identity matrix input, that intersection is exactly the main diagonal. PE[i][i] sees `1 x 1` once; every other PE sees `1 x 0` or `0 x 1`. The result is the identity matrix in `c_out`, settled in `2*SIZE - 1` cycles.
 
