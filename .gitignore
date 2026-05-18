@@ -74,3 +74,8 @@ Thumbs.db
 # Quartus temp GUI state
 *.pid
 *.lock
+# Verilator output directories
+obj_dir/
+
+# Waveform dump files
+*.vcd
