@@ -1,6 +1,6 @@
 # TOOLCHAIN
 
-## Linting — slang-server & slang (VSCode)
+## Linting — slang-server (VSCode)
 * **slang-server:** The Language Server Protocol (LSP) implementation developed by **Hudson River Trading (HRT)**. It runs in the background of your editor to provide real-time, as-you-type SystemVerilog linting, syntax highlighting, and code navigation.
 * **Extension Configuration:** Use the "verilog-hdl" extension by eda-playground, or install `slang-server` separately to bind it to your IDE.
 
