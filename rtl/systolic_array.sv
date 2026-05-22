@@ -9,8 +9,8 @@ module systolic_array #(
     parameter ACC_WIDTH = 32
     ) (
     input   logic clk, rst_n, sys_en,
-    input logic [7:0] a [2:0][2:0], 
-    input logic [7:0] b [2:0][2:0],       // 3x3 input matrices
+    input   logic [7:0] a [2:0][2:0], 
+    input   logic [7:0] b [2:0][2:0],       // 3x3 input matrices
     output  logic signed [31:0] result [2:0] 
 );
 

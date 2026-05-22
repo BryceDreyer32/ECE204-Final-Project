@@ -11,7 +11,7 @@ module systolic_ctrl(
     input logic [7:0] b [2:0][2:0],       // 3x3 input matrices
     output logic [7:0] row_val [2:0],     // Row values for the systolic array
     output logic [7:0] col_val [2:0],     // Column values for the systolic array
-    output logic pe_en [2:0]             // Row enable signals for the systolic array
+    output logic pe_en [2:0]              // Row enable signals for the systolic array
 );
 
 logic [3:0] counter; // Counter to track the current cycle of the computation
@@ -20,7 +20,7 @@ logic [7:0] col_val_reg [7:0][2:0]; // Registers to hold the current column valu
 logic [7:0] pe_en_reg [2:0]; // Registers to hold the current row enable 
 
 typedef enum logic[2:0] {  
-    IDLE,          // Waiting for sys_en to start the computation
+    IDLE,           // Waiting for sys_en to start the computation
     LOAD_INPUTS,    // Loading input values into the systolic array
     COMPUTE,        // Performing the matrix multiplication
     OUTPUT_RESULTS  // Outputting the final results from the systolic array
@@ -49,27 +49,26 @@ always_ff @(posedge clk or negedge rst_n) begin
 
             LOAD_INPUTS: begin
                 // Load row and column values into registers
-
                 row_val_reg <= '{
                     '{8'b0,        8'b0,        8'b0},
-                    '{8'b0,        8'b0,        a[2][2]},
-                    '{8'b0,        a[1][2],     a[2][1]},
-                    '{a[0][2],     a[1][1],     a[2][0]},
-                    '{a[0][1],     a[1][0],     8'b0},
-                    '{a[0][0],     8'b0,        8'b0},
                     '{8'b0,        8'b0,        8'b0},
-                    '{8'b0,        8'b0,        8'b0}
+                    '{8'b0,        8'b0,        8'b0},
+                    '{a[0][0],     8'b0,        8'b0},
+                    '{a[0][1],     a[1][0],     8'b0},
+                    '{a[0][2],     a[1][1],     a[2][0]},
+                    '{8'b0,        a[1][2],     a[2][1]},
+                    '{8'b0,        8'b0,        a[2][2]}
                 };
 
                 col_val_reg <= '{
                     '{8'b0,        8'b0,        8'b0},
-                    '{8'b0,        8'b0,        b[0][0]},
-                    '{8'b0,        b[1][0],     b[0][1]},
-                    '{b[2][0],     b[1][1],     b[0][2]},
-                    '{b[2][1],     b[1][2],     8'b0},
-                    '{b[2][2],     8'b0,        8'b0},
                     '{8'b0,        8'b0,        8'b0},
-                    '{8'b0,        8'b0,        8'b0}
+                    '{8'b0,        8'b0,        8'b0},
+                    '{b[0][0],     8'b0,        8'b0},
+                    '{b[1][0],     b[0][1],     8'b0},
+                    '{b[2][0],     b[1][1],     b[0][2]},
+                    '{8'b0,        b[2][1],     b[1][2]},
+                    '{8'b0,        8'b0,        b[2][2]}
                 };
 
                 pe_en_reg[0] <= {5'b0, 3'b111};
