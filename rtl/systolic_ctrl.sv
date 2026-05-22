@@ -11,7 +11,8 @@ module systolic_ctrl(
     input logic [7:0] b [2:0][2:0],       // 3x3 input matrices
     output logic [7:0] row_val [2:0],     // Row values for the systolic array
     output logic [7:0] col_val [2:0],     // Column values for the systolic array
-    output logic pe_en [2:0]              // Row enable signals for the systolic array
+    output logic pe_en [2:0],             // Row enable signals for the systolic array
+    output logic calc_out                // Pulse once data starts transfering
 );
 
 logic [3:0] counter; // Counter to track the current cycle of the computation
@@ -38,6 +39,7 @@ always_ff @(posedge clk or negedge rst_n) begin
         row_val     <= '{default:8'b0};
         col_val     <= '{default:8'b0};
         pe_en       <= '{default:3'b0};
+        calc_out   <= 1'b0;
     end
     
     else if (sys_en) begin
@@ -93,6 +95,7 @@ always_ff @(posedge clk or negedge rst_n) begin
             OUTPUT_RESULTS: begin
                 // Output final results from the systolic array
                 pe_en       <= '{default:3'b0};
+                calc_out   <= 1'b1;
                 if (counter <= 4'hF) 
                     counter <= counter + 1;
 
