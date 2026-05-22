@@ -23,6 +23,27 @@ output_files/
 *_generated.*
 *.ddb
 *.qdb
+*.xml
+platform_designer/AvalonInterface/**/**.nlv
+platform_designer/AvalonInterface/**/**.debuginfo
+platform_designer/AvalonInterface/**/**.sdc
+platform_designer/AvalonInterface/**/**.vhd
+platform_designer/AvalonInterface/**/*.qip
+platform_designer/AvalonInterface/**/*.vhd
+platform_designer/AvalonInterface/**/*.html
+
+
+# Platform Designer generated output
+platform_designer/synthesis/
+platform_designer/simulation/
+platform_designer/*.sopcinfo
+platform_designer/*.bsf
+
+# Keep these (source files you authored)
+!platform_designer/*.qsys
+!platform_designer/*.tcl
+!platform_designer/*.sv
+!platform_designer/*.v
 
 # =========================
 # Questa / ModelSim outputs

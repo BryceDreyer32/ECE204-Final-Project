@@ -9,7 +9,7 @@
 // to your version control system if you want to keep it.
 
 `timescale 1 ps / 1 ps
-module reg_file (
+module register_file (
 		input  wire [7:0]  avs_s0_address,     // avs_s0.address
 		input  wire        avs_s0_read,        //       .read
 		output wire [31:0] avs_s0_readdata,    //       .readdata
