@@ -8,9 +8,16 @@ module systolic_array #(
     parameter WIDTH = 8,
     parameter ACC_WIDTH = 32
     ) (
-    input   logic clk, rst_n, sys_en,
-    input   logic [7:0] a [2:0][2:0], 
-    input   logic [7:0] b [2:0][2:0],       // 3x3 input matrices
+    input  logic        clk,
+    input  logic        rst_n,
+    input  logic        sys_en,
+    input  logic [7:0]  avs_s0_address,     // avs_s0.address
+	input  logic        avs_s0_read,        //       .read
+	output logic [31:0] avs_s0_readdata,    //       .readdata
+	input  logic        avs_s0_write,       //       .write
+	input  logic [31:0] avs_s0_writedata,   //       .writedata
+	output logic        avs_s0_waitrequest, //       .waitrequest
+
     output  logic signed [31:0] result [2:0] 
 );
 
@@ -21,8 +28,27 @@ logic           pe_en       [2:0];
 logic [7:0]     a_in        [2:0][3:0];
 logic [7:0]     b_in        [3:0][3:0];
 logic [31:0]    acc_out     [2:0][3:0];
+logic           calc_out;
+logic [7:0]     a           [2:0][2:0];
+logic [7:0]     b           [2:0][2:0];       // 3x3 input matrices
 
 genvar row, col;
+
+reg_file i_reg_file(
+    .clk,          		//  clock.clk
+    .rst_n,         	//  reset.reset_n
+    .avs_s0_address,     // avs_s0.address
+    .avs_s0_read,        //       .read
+    .avs_s0_readdata,    //       .readdata
+    .avs_s0_write,       //       .write
+    .avs_s0_writedata,   //       .writedata
+    .avs_s0_waitrequest, //       .waitrequest
+
+    .calc_out,
+    .result, 
+    .a, 
+    .b     	// 3x3 input matrices
+);
 
 systolic_ctrl i_ctrl(
     .clk,
@@ -32,7 +58,8 @@ systolic_ctrl i_ctrl(
     .b,             
     .row_val,       
     .col_val,       
-    .pe_en         
+    .pe_en,
+    .calc_out         
 );
 
 generate

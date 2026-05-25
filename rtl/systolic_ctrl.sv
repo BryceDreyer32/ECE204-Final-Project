@@ -31,15 +31,15 @@ STATE state;
 
 always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        counter <= 0;
-        state <= IDLE;
+        counter     <= 0;
+        state       <= IDLE;
         row_val_reg <= '{default:3'b0};
         col_val_reg <= '{default:3'b0};
         pe_en_reg   <= '{default:3'b0};
         row_val     <= '{default:8'b0};
         col_val     <= '{default:8'b0};
         pe_en       <= '{default:3'b0};
-        calc_out   <= 1'b0;
+        calc_out    <= 1'b0;
     end
     
     else if (sys_en) begin
@@ -89,7 +89,7 @@ always_ff @(posedge clk or negedge rst_n) begin
             OUTPUT_RESULTS: begin
                 // Output final results from the systolic array
                 pe_en       <= '{default:3'b0};
-                calc_out   <= 1'b1;
+                calc_out    <= 1'b1;
                 if (counter <= 4'hF) 
                     counter <= counter + 1;
 
@@ -97,7 +97,7 @@ always_ff @(posedge clk or negedge rst_n) begin
                     state   <= IDLE; // IDLE after outputting results
             end
 
-            default: state <= IDLE;
+            default: state  <= IDLE;
         endcase
     end
 end

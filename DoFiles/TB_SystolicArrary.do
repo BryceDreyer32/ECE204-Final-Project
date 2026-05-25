@@ -49,7 +49,7 @@ vsim -gui work.tb_systolic_array
 add wave -group TopLogic -position end -radix decimal sim:/tb_systolic_array/a 
 add wave -group TopLogic -position end -radix decimal sim:/tb_systolic_array/b
 add wave -group TopLogic -position end  sim:/tb_systolic_array/clk
-add wave -group TopLogic -position end  sim:/tb_systolic_array/result
+add wave -group TopLogic -position end -radix decimal sim:/tb_systolic_array/result
 add wave -group TopLogic -position end  sim:/tb_systolic_array/rst_n
 add wave -group TopLogic -position end  sim:/tb_systolic_array/sys_en
 
