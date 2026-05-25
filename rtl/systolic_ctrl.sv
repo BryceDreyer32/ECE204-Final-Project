@@ -12,12 +12,12 @@ module systolic_ctrl(
     output logic [7:0] row_val [2:0],     // Row values for the systolic array
     output logic [7:0] col_val [2:0],     // Column values for the systolic array
     output logic pe_en [2:0],             // Row enable signals for the systolic array
-    output logic calc_out                // Pulse once data starts transfering
+    output logic calc_out                 // High once data starts transfering
 );
 
 logic [3:0] counter; // Counter to track the current cycle of the computation
-logic [7:0] row_val_reg [7:0][2:0]; // Registers to hold the current row values
-logic [7:0] col_val_reg [7:0][2:0]; // Registers to hold the current column values
+logic [7:0] row_val_reg [4:0][2:0]; // Registers to hold the current row values
+logic [7:0] col_val_reg [4:0][2:0]; // Registers to hold the current column values
 logic [7:0] pe_en_reg [2:0]; // Registers to hold the current row enable 
 
 typedef enum logic[2:0] {  
@@ -52,9 +52,6 @@ always_ff @(posedge clk or negedge rst_n) begin
             LOAD_INPUTS: begin
                 // Load row and column values into registers
                 row_val_reg <= '{
-                    '{8'b0,        8'b0,        8'b0},
-                    '{8'b0,        8'b0,        8'b0},
-                    '{8'b0,        8'b0,        8'b0},
                     '{a[0][0],     8'b0,        8'b0},
                     '{a[0][1],     a[1][0],     8'b0},
                     '{a[0][2],     a[1][1],     a[2][0]},
@@ -63,9 +60,6 @@ always_ff @(posedge clk or negedge rst_n) begin
                 };
 
                 col_val_reg <= '{
-                    '{8'b0,        8'b0,        8'b0},
-                    '{8'b0,        8'b0,        8'b0},
-                    '{8'b0,        8'b0,        8'b0},
                     '{b[0][0],     8'b0,        8'b0},
                     '{b[1][0],     b[0][1],     8'b0},
                     '{b[2][0],     b[1][1],     b[0][2]},
@@ -73,9 +67,9 @@ always_ff @(posedge clk or negedge rst_n) begin
                     '{8'b0,        8'b0,        b[2][2]}
                 };
 
-                pe_en_reg[0] <= {5'b0, 3'b111};
-                pe_en_reg[1] <= {4'b0, 3'b111, 1'b0};
-                pe_en_reg[2] <= {3'b0, 3'b111, 2'b0};
+                pe_en_reg[0] <= {2'b0, 3'b111};
+                pe_en_reg[1] <= {1'b0, 3'b111, 1'b0};
+                pe_en_reg[2] <= {3'b111, 2'b0};
                 state <= COMPUTE;
             end
 
@@ -88,7 +82,7 @@ always_ff @(posedge clk or negedge rst_n) begin
                 pe_en[2]    <= pe_en_reg[2][counter[2:0]];
                 counter     <= counter + 1;
 
-                if(counter == 4'h6) // After 7 cycles, we should have the final results ready
+                if(counter == 4'h4) // After 4 cycles, we should have the final results ready
                     state <= OUTPUT_RESULTS;
             end
 
