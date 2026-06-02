@@ -19,7 +19,8 @@ module tb_systolic_ctrl;
         .b(b),
         .row_val(row_val),
         .col_val(col_val),
-        .pe_en(pe_en)
+        .pe_en(pe_en),
+        .calc_out()
     );
 
     initial clk = 1'b0;

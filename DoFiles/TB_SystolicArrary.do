@@ -40,6 +40,8 @@ vlog -sv -work work +incdir+../../rtl {../../rtl/systolic_ctrl.sv}
 
 vlog -sv -work work +incdir+../../rtl {../../rtl/pe.sv}
 
+vlog -sv -work work +incdir+../../rtl {../../rtl/reg_file.sv}
+
 vlog -sv -work work +incdir+../../rtl {../../rtl/systolic_array.sv}
 
 vlog -sv -work work +incdir+../../rtl {../../tb/tb_systolic_array.sv}

@@ -3,18 +3,24 @@
 // Description  : Systolic array register file. Interfaces with USB blaster via the 
 //				  Memory Mapped Avalon Interace. 
 
-`define A_IN 	8'h0
-`define B_IN 	8'h1
+`define A_IN1 	8'h0
+`define A_IN2 	8'h1
+`define A_IN3 	8'h2
 
-`define RESULTS_OUT_0 8'h2
-`define RESULTS_OUT_1 8'h3
-`define RESULTS_OUT_2 8'h4
-`define RESULTS_OUT_3 8'h5
-`define RESULTS_OUT_4 8'h6
-`define RESULTS_OUT_5 8'h7
-`define RESULTS_OUT_6 8'h8
-`define RESULTS_OUT_7 8'h9
-`define RESULTS_OUT_8 8'hA
+
+`define B_IN1 	8'h3
+`define B_IN2 	8'h4
+`define B_IN3 	8'h5
+
+`define RESULTS_OUT_0 8'h6
+`define RESULTS_OUT_1 8'h7
+`define RESULTS_OUT_2 8'h8
+`define RESULTS_OUT_3 8'h9
+`define RESULTS_OUT_4 8'h10
+`define RESULTS_OUT_5 8'h11
+`define RESULTS_OUT_6 8'h12
+`define RESULTS_OUT_7 8'h13
+`define RESULTS_OUT_8 8'h14
 
 module reg_file (
 	input  logic        clk,          		//  clock.clk
@@ -34,8 +40,8 @@ module reg_file (
 
 logic [3:0] counter; // Counter to track the current cycle of the computation
 
-// 16 32-bit registers
-logic [31:0] register [15:0];
+// 32 32-bit registers
+logic [31:0] register [31:0];
 
 // ------------- 	Reset Register	-------------
 always @(posedge clk or negedge rst_n) begin
@@ -48,12 +54,20 @@ always @(posedge clk or negedge rst_n) begin
 	
 		if(avs_s0_write) begin
 			// ------------- 	Matrix Input Register A	-------------
-			if(avs_s0_address == `A_IN)
-				register[`A_IN]	<=  avs_s0_writedata[31:0];
+			if(avs_s0_address == `A_IN1)
+				register[`A_IN1]	<=  avs_s0_writedata[31:0];
+			else if(avs_s0_address == `A_IN2)
+				register[`A_IN2]	<=  avs_s0_writedata[31:0];
+			else if(avs_s0_address == `A_IN3)
+				register[`A_IN3]	<=  avs_s0_writedata[31:0];
 
 			// ------------- 	Matrix Input Register B	-------------
-			else if(avs_s0_address == `B_IN)
-				register[`B_IN]	<=  avs_s0_writedata[31:0];
+			else if(avs_s0_address == `B_IN1)
+				register[`B_IN1]	<=  avs_s0_writedata[31:0];
+			else if(avs_s0_address == `B_IN2)
+				register[`B_IN2]	<=  avs_s0_writedata[31:0];
+			else if(avs_s0_address == `B_IN3)
+				register[`B_IN3]	<=  avs_s0_writedata[31:0];
 		end
 
 		else if(avs_s0_read) begin
@@ -125,13 +139,29 @@ end
 
 always_comb begin
 	// Systolic Array control logic 'a' input
-	a[0][0]  = register[`A_IN][31:24];
-	a[0][1]  = register[`A_IN][23:16];
-	a[0][2]  = register[`A_IN][15:8];
+	a[0][0]  = register[`A_IN1][31:24];
+	a[0][1]  = register[`A_IN1][23:16];
+	a[0][2]  = register[`A_IN1][15:8];
+
+	a[1][0]  = register[`A_IN2][31:24];
+	a[1][1]  = register[`A_IN2][23:16];
+	a[1][2]  = register[`A_IN2][15:8];
+
+	a[2][0]  = register[`A_IN3][31:24];
+	a[2][1]  = register[`A_IN3][23:16];
+	a[2][2]  = register[`A_IN3][15:8];
 
 	// Systolic Array control logic 'b' input
-	b[0][0]  = register[`B_IN][31:24];
-	b[0][1]  = register[`B_IN][23:16];
-	b[0][2]  = register[`B_IN][15:8];
+	b[0][0]  = register[`B_IN1][31:24];
+	b[0][1]  = register[`B_IN1][23:16];
+	b[0][2]  = register[`B_IN1][15:8];
+
+	b[1][0]  = register[`B_IN2][31:24];
+	b[1][1]  = register[`B_IN2][23:16];	
+	b[1][2]  = register[`B_IN2][15:8];
+
+	b[2][0]  = register[`B_IN3][31:24];
+	b[2][1]  = register[`B_IN3][23:16];
+	b[2][2]  = register[`B_IN3][15:8];
 end
 endmodule
