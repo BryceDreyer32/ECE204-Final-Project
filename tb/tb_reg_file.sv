@@ -123,7 +123,7 @@ reg_file dut(
         avs_s0_writedata[7:0] = 8'd0;
 
         // Deassert write and read A and B matricies back to verify correct loading
-        @(posedge clk);
+        repeat(2) @(posedge clk);
         avs_s0_write = 1'b0;
 
 
