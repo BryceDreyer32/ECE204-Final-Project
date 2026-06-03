@@ -57,24 +57,16 @@ add wave -group Avalon_Interface -position end -radix decimal sim:/tb_systolic_a
 add wave -group Avalon_Interface -position end -radix decimal sim:/tb_systolic_array/avs_s0_write
 add wave -group Avalon_Interface -position end -radix decimal sim:/tb_systolic_array/avs_s0_writedata
 
-add wave -group Systolic_Ctrl -position end  sim:/tb_systolic_array/dut/en
-add wave -group Systolic_Ctrl -position end  sim:/tb_systolic_array/dut/pe_en
-add wave -group Systolic_Ctrl -position end -radix decimal sim:/tb_systolic_array/dut/a
-add wave -group Systolic_Ctrl -position end -radix decimal sim:/tb_systolic_array/dut/b
-add wave -group Systolic_Ctrl -position 12 	-radix decimal sim:/tb_systolic_array/dut/a_in
-add wave -group Systolic_Ctrl -position end -radix decimal sim:/tb_systolic_array/dut/b_in
-add wave -group Systolic_Ctrl -position end -radix decimal sim:/tb_systolic_array/dut/calc_out
-add wave -group Systolic_Ctrl -position 15  -radix decimal sim:/tb_systolic_array/dut/col_val
-add wave -group Systolic_Ctrl -position 13  -radix decimal sim:/tb_systolic_array/dut/row_val
 add wave -group Systolic_Ctrl -position end  sim:/tb_systolic_array/dut/i_ctrl/state
+add wave -group Systolic_Ctrl -position end sim:/tb_systolic_array/dut/i_ctrl/pe_en_reg
+add wave -group Systolic_Ctrl -position end  sim:/tb_systolic_array/dut/i_ctrl/pe_en
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/row_val_reg
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/row_val
-add wave -group Systolic_Ctrl -position 10  sim:/tb_systolic_array/dut/i_ctrl/pe_en_reg
-add wave -group Systolic_Ctrl -position 12  sim:/tb_systolic_array/dut/i_ctrl/pe_en
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/col_val_reg
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/col_val
-add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/b
 add wave -group Systolic_Ctrl -position 17  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/a
+add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/b
+
 
 
 add wave -group PE[0][0] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/en
