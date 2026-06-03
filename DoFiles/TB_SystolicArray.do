@@ -48,10 +48,10 @@ vlog -sv -work work +incdir+../../rtl {../../tb/tb_systolic_array.sv}
 
 vsim -gui work.tb_systolic_array
 
-add wave -group Systolic Array -position end  sim:/tb_systolic_array/rst_n
-add wave -group Systolic Array -position end  sim:/tb_systolic_array/clk
-add wave -group Systolic Array -position end -radix decimal sim:/tb_systolic_array/result
-add wave -group Systolic Array -position end  sim:/tb_systolic_array/dut/sys_en
+add wave -group Systolic_Array -position end  sim:/tb_systolic_array/rst_n
+add wave -group Systolic_Array -position end  sim:/tb_systolic_array/clk
+add wave -group Systolic_Array -position end -radix decimal sim:/tb_systolic_array/result
+add wave -group Systolic_Array -position end  sim:/tb_systolic_array/dut/sys_en
 
 add wave -group Avalon_Interface -position end -radix decimal sim:/tb_systolic_array/avs_s0_address
 add wave -group Avalon_Interface -position end -radix decimal sim:/tb_systolic_array/avs_s0_write
@@ -64,8 +64,8 @@ add wave -group Systolic_Ctrl -position end -radix decimal sim:/tb_systolic_arra
 add wave -group Systolic_Ctrl -position 12 	-radix decimal sim:/tb_systolic_array/dut/a_in
 add wave -group Systolic_Ctrl -position end -radix decimal sim:/tb_systolic_array/dut/b_in
 add wave -group Systolic_Ctrl -position end -radix decimal sim:/tb_systolic_array/dut/calc_out
-add wave -group Systolic_Ctrl -position 15  -radix decimalsim:/tb_systolic_array/dut/col_val
-add wave -group Systolic_Ctrl -position 13  -radix decimalsim:/tb_systolic_array/dut/row_val
+add wave -group Systolic_Ctrl -position 15  -radix decimal sim:/tb_systolic_array/dut/col_val
+add wave -group Systolic_Ctrl -position 13  -radix decimal sim:/tb_systolic_array/dut/row_val
 add wave -group Systolic_Ctrl -position end  sim:/tb_systolic_array/dut/i_ctrl/state
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/row_val_reg
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/row_val
@@ -77,34 +77,36 @@ add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_arr
 add wave -group Systolic_Ctrl -position 17  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/a
 
 
-add wave -group PE[0][0] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/en
-add wave -group PE[0][0] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/en_out
-add wave -group PE[0][0] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/a_in
-add wave -group PE[0][0] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/a_out
-add wave -group PE[0][0] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/b_in
-add wave -group PE[0][0] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/b_out
-add wave -group PE[0][0] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/acc
-add wave -group PE[0][0] -radix decmial -position 25  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/acc_in
-add wave -group PE[0][0] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/a_out
+add wave -group PE[0][0] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/en
+add wave -group PE[0][0] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/en_out
+add wave -group PE[0][0] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/a_in
+add wave -group PE[0][0] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/a_out
+add wave -group PE[0][0] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/b_in
+add wave -group PE[0][0] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/b_out
+add wave -group PE[0][0] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/acc
+add wave -group PE[0][0] -radix decimal -position 25  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/acc_in
+add wave -group PE[0][0] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[0]/i_pe/a_out
 
-add wave -group PE[0][1] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/en_out
-add wave -group PE[0][1] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/en
-add wave -group PE[0][1] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/b_out
-add wave -group PE[0][1] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/b_in
-add wave -group PE[0][1] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/acc_out
-add wave -group PE[0][1] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/acc_in
-add wave -group PE[0][1] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/acc
-add wave -group PE[0][1] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/a_out
-add wave -group PE[0][1] -radix decmial -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/a_in
+add wave -group PE[0][1] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/en_out
+add wave -group PE[0][1] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/en
+add wave -group PE[0][1] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/b_out
+add wave -group PE[0][1] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/b_in
+add wave -group PE[0][1] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/acc_out
+add wave -group PE[0][1] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/acc_in
+add wave -group PE[0][1] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/acc
+add wave -group PE[0][1] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/a_out
+add wave -group PE[0][1] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[1]/i_pe/a_in
 
-add wave -group PE[0][1] -radix decmial -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/en_out
-add wave -group PE[0][1] -radix decmial -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/en
-add wave -group PE[0][1] -radix decmial -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/b_out
-add wave -group PE[0][1] -radix decmial -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/b_in
-add wave -group PE[0][1] -radix decmial -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/acc_out
-add wave -group PE[0][1] -radix decmial -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/acc_in
-add wave -group PE[0][1] -radix decmial -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/acc
-add wave -group PE[0][1] -radix decmial -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/a_out
-add wave -group PE[0][1] -radix decmial -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/a_ine
+add wave -group PE[0][2] -radix decimal -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/en_out
+add wave -group PE[0][2] -radix decimal -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/en
+add wave -group PE[0][2] -radix decimal -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/b_out
+add wave -group PE[0][2] -radix decimal -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/b_in
+add wave -group PE[0][2] -radix decimal -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/acc_out
+add wave -group PE[0][2] -radix decimal -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/acc_in
+add wave -group PE[0][2] -radix decimal -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/acc
+add wave -group PE[0][2] -radix decimal -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/a_out
+add wave -group PE[0][2] -radix decimal -position 38  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/a_in
+
+run -all
 
 
