@@ -61,17 +61,22 @@ systolic_array #(
     initial begin
         $dumpfile("systolic_array.vcd");
         $dumpvars(0, tb_systolic_array);
-
-// Hard set
-        avs_s0_read = 1'b0;
  
-        // Reset sequence for two cycles
+        /////////////////////////////////////
+        /// Reset sequence for two cycles ///
+        /////////////////////////////////////
         rst_n   = 1'b0;
         avs_s0_write = 1'b0;
 
-        // Deassert reset, load data
+
+        //////////////////////////////////////
+        ///     Begin Register Writing     ///
+        //////////////////////////////////////
+        // Deassert reset, signal writing to the register file
         rst_n   = 1'b1;
         avs_s0_write = 1'b1;
+        avs_s0_read = 1'b0;
+
         // Load A matrix
         @(posedge clk);
         avs_s0_address = `A_IN1;
@@ -116,11 +121,53 @@ systolic_array #(
         avs_s0_writedata[15:8] = 8'd4;
         avs_s0_writedata[7:0] = 8'd0;
 
+        //////////////////////////////////////
+        ///  Begin Systolic Computation    ///
+        //////////////////////////////////////
+
         // Deassert write and begin calculations
         repeat(2) @(posedge clk);
         avs_s0_write = 1'b0;
 
-        repeat(17) @(posedge clk);
+        // Wait for the systolic array to signal that it's done with calculations
+        repeat(20) @(posedge clk);
+        //@(negedge dut.calc_out);
+
+
+        //////////////////////////////////////
+        ///     Begin Reading Results      ///
+        //////////////////////////////////////
+        avs_s0_read = 1'b1;
+
+        @(posedge clk);
+        avs_s0_address = `RESULTS_OUT_0;
+
+        @(posedge clk);
+        avs_s0_address = `RESULTS_OUT_1;
+
+        @(posedge clk);
+        avs_s0_address = `RESULTS_OUT_2;
+
+        @(posedge clk);
+        avs_s0_address = `RESULTS_OUT_3;
+
+        @(posedge clk);
+        avs_s0_address = `RESULTS_OUT_4;
+
+        @(posedge clk);
+        avs_s0_address = `RESULTS_OUT_5;
+
+        @(posedge clk);
+        avs_s0_address = `RESULTS_OUT_6;
+
+        @(posedge clk);
+        avs_s0_address = `RESULTS_OUT_7;
+
+        @(posedge clk);
+        avs_s0_address = `RESULTS_OUT_8;
+
+
+        avs_s0_read = 1'b0;
 
         $display("Testbench completed.");
         $finish;

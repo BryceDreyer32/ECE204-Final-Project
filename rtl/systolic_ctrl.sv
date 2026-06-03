@@ -45,26 +45,50 @@ always_ff @(posedge clk or negedge rst_n) begin
     else if (sys_en) begin
         case(state)
             IDLE: begin
+                calc_out <= 1'b0;
                 if (sys_en)
                     state <= LOAD_INPUTS;
             end
 
             LOAD_INPUTS: begin
                 // Load row and column values into registers
+                // row_val_reg <= '{
+                //     '{a[0][0],     8'b0,        8'b0},
+                //     '{a[0][1],     a[1][0],     8'b0},
+                //     '{a[0][2],     a[1][1],     a[2][0]},
+                //     '{8'b0,        a[1][2],     a[2][1]},
+                //     '{8'b0,        8'b0,        a[2][2]}
+                // };
+
+                // row_val_reg <= '{
+                //     '{8'b0,        8'b0,        a[2][2]},
+                //     '{8'b0,        a[1][2],     a[2][1]},
+                //     '{a[0][2],     a[1][1],     a[2][0]},
+                //     '{a[0][1],     a[1][0],     8'b0},
+                //     '{a[0][0],     8'b0,        8'b0}
+                // };
                 row_val_reg <= '{
-                    '{a[0][0],     8'b0,        8'b0},
-                    '{a[0][1],     a[1][0],     8'b0},
-                    '{a[0][2],     a[1][1],     a[2][0]},
-                    '{8'b0,        a[1][2],     a[2][1]},
-                    '{8'b0,        8'b0,        a[2][2]}
+                    '{a[2][2],    8'b0,       8'b0},
+                    '{a[2][1],    a[1][2],    8'b0},
+                    '{a[2][0],    a[1][1],    a[0][2]},
+                    '{8'b0,       a[1][0],    a[0][1]},
+                    '{8'b0,       8'b0,       a[0][0]}
                 };
 
+                // col_val_reg <= '{
+                //     '{b[0][0],     8'b0,        8'b0},
+                //     '{b[1][0],     b[0][1],     8'b0},
+                //     '{b[2][0],     b[1][1],     b[0][2]},
+                //     '{8'b0,        b[2][1],     b[1][2]},
+                //     '{8'b0,        8'b0,        b[2][2]}
+                // };
+
                 col_val_reg <= '{
-                    '{b[0][0],     8'b0,        8'b0},
-                    '{b[1][0],     b[0][1],     8'b0},
-                    '{b[2][0],     b[1][1],     b[0][2]},
-                    '{8'b0,        b[2][1],     b[1][2]},
-                    '{8'b0,        8'b0,        b[2][2]}
+                    '{b[2][2],    8'b0,       8'b0},
+                    '{b[1][2],    b[2][1],    8'b0},
+                    '{b[0][2],    b[1][1],    b[2][0]},
+                    '{8'b0,       b[0][1],    b[1][0]},
+                    '{8'b0,       8'b0,       b[0][0]}
                 };
 
                 pe_en_reg[0] <= {2'b0, 3'b111};
@@ -91,9 +115,10 @@ always_ff @(posedge clk or negedge rst_n) begin
                 // Output final results from the systolic array
                 pe_en       <= '{default:3'b0};
                 calc_out    <= 1'b1;
-                if (counter <= 4'hF) 
-                    counter <= counter + 4'b1;
-
+                
+                if (counter <= 4'hF) // After 5 cycles, results have been outputted
+                    counter <= counter + 4'b1; 
+            
                 else
                     state   <= IDLE; // IDLE after outputting results
             end
