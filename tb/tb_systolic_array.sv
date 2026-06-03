@@ -1,22 +1,4 @@
-`define A_IN1 	8'h0
-`define A_IN2 	8'h1
-`define A_IN3 	8'h2
-
-
-`define B_IN1 	8'h3
-`define B_IN2 	8'h4
-`define B_IN3 	8'h5
-
-`define RESULTS_OUT_0 8'h6
-`define RESULTS_OUT_1 8'h7
-`define RESULTS_OUT_2 8'h8
-`define RESULTS_OUT_3 8'h9
-`define RESULTS_OUT_4 8'h10
-`define RESULTS_OUT_5 8'h11
-`define RESULTS_OUT_6 8'h12
-`define RESULTS_OUT_7 8'h13
-`define RESULTS_OUT_8 8'h14
-
+`include "reg_address_map.svh"
 
 module tb_systolic_array;
     logic clk; 
@@ -63,10 +45,11 @@ systolic_array #(
         $dumpvars(0, tb_systolic_array);
  
         /////////////////////////////////////
-        /// Reset sequence for two cycles ///
+        /// Reset sequence  ///
         /////////////////////////////////////
         rst_n   = 1'b0;
         avs_s0_write = 1'b0;
+        @(posedge clk);
 
 
         //////////////////////////////////////
@@ -121,6 +104,10 @@ systolic_array #(
         avs_s0_writedata[15:8] = 8'd4;
         avs_s0_writedata[7:0] = 8'd0;
 
+        @(posedge clk);
+        avs_s0_address = `SYSTOLIC_CTRL;
+        avs_s0_writedata = 32'd1; // Set sys_en to 1 to start the computation
+
         //////////////////////////////////////
         ///  Begin Systolic Computation    ///
         //////////////////////////////////////
@@ -166,8 +153,10 @@ systolic_array #(
         @(posedge clk);
         avs_s0_address = `RESULTS_OUT_8;
 
-
+        @(posedge clk);
         avs_s0_read = 1'b0;
+
+        repeat(3) @(posedge clk);
 
         $display("Testbench completed.");
         $finish;

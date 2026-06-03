@@ -20,11 +20,10 @@ logic [7:0] row_val_reg [4:0][2:0]; // Registers to hold the current row values
 logic [7:0] col_val_reg [4:0][2:0]; // Registers to hold the current column values
 logic [7:0] pe_en_reg [2:0]; // Registers to hold the current row enable 
 
-typedef enum logic[2:0] {  
+typedef enum logic[1:0] {  
     IDLE,           // Waiting for sys_en to start the computation
     LOAD_INPUTS,    // Loading input values into the systolic array
-    COMPUTE,        // Performing the matrix multiplication
-    OUTPUT_RESULTS  // Outputting the final results from the systolic array
+    COMPUTE         // Performing the matrix multiplication
 } STATE;
 
 STATE state;
@@ -42,7 +41,7 @@ always_ff @(posedge clk or negedge rst_n) begin
         calc_out    <= 1'b0;
     end
     
-    else if (sys_en) begin
+    else begin
         case(state)
             IDLE: begin
                 calc_out <= 1'b0;
@@ -52,21 +51,6 @@ always_ff @(posedge clk or negedge rst_n) begin
 
             LOAD_INPUTS: begin
                 // Load row and column values into registers
-                // row_val_reg <= '{
-                //     '{a[0][0],     8'b0,        8'b0},
-                //     '{a[0][1],     a[1][0],     8'b0},
-                //     '{a[0][2],     a[1][1],     a[2][0]},
-                //     '{8'b0,        a[1][2],     a[2][1]},
-                //     '{8'b0,        8'b0,        a[2][2]}
-                // };
-
-                // row_val_reg <= '{
-                //     '{8'b0,        8'b0,        a[2][2]},
-                //     '{8'b0,        a[1][2],     a[2][1]},
-                //     '{a[0][2],     a[1][1],     a[2][0]},
-                //     '{a[0][1],     a[1][0],     8'b0},
-                //     '{a[0][0],     8'b0,        8'b0}
-                // };
                 row_val_reg <= '{
                     '{a[2][2],    8'b0,       8'b0},
                     '{a[2][1],    a[1][2],    8'b0},
@@ -74,14 +58,6 @@ always_ff @(posedge clk or negedge rst_n) begin
                     '{8'b0,       a[1][0],    a[0][1]},
                     '{8'b0,       8'b0,       a[0][0]}
                 };
-
-                // col_val_reg <= '{
-                //     '{b[0][0],     8'b0,        8'b0},
-                //     '{b[1][0],     b[0][1],     8'b0},
-                //     '{b[2][0],     b[1][1],     b[0][2]},
-                //     '{8'b0,        b[2][1],     b[1][2]},
-                //     '{8'b0,        8'b0,        b[2][2]}
-                // };
 
                 col_val_reg <= '{
                     '{b[2][2],    8'b0,       8'b0},
@@ -107,20 +83,17 @@ always_ff @(posedge clk or negedge rst_n) begin
                 pe_en[2]    <= pe_en_reg[2][counter[3:0]];
                 counter     <= counter + 4'b1;
 
-                if(counter == 4'h4) // After 4 cycles, we should have the final results ready
-                    state <= OUTPUT_RESULTS;
-            end
+                if(counter == 4'h3) begin
+                    calc_out    <= 1'b1;
+                end
 
-            OUTPUT_RESULTS: begin
-                // Output final results from the systolic array
-                pe_en       <= '{default:3'b0};
-                calc_out    <= 1'b1;
-                
-                if (counter <= 4'hF) // After 5 cycles, results have been outputted
-                    counter <= counter + 4'b1; 
-            
-                else
-                    state   <= IDLE; // IDLE after outputting results
+                else if(counter == 4'h5) begin
+                    pe_en       <= '{default:3'b0};
+                end
+
+                else if (counter == 4'hA) begin
+                    state       <= IDLE; // After 10 cycles, computation is done, return to IDLE
+                end
             end
 
             default: state  <= IDLE;

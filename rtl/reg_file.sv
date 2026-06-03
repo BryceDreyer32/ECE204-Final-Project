@@ -3,24 +3,7 @@
 // Description  : Systolic array register file. Interfaces with USB blaster via the 
 //				  Memory Mapped Avalon Interace. 
 
-`define A_IN1 	8'h0
-`define A_IN2 	8'h1
-`define A_IN3 	8'h2
-
-
-`define B_IN1 	8'h3
-`define B_IN2 	8'h4
-`define B_IN3 	8'h5
-
-`define RESULTS_OUT_0 8'h6
-`define RESULTS_OUT_1 8'h7
-`define RESULTS_OUT_2 8'h8
-`define RESULTS_OUT_3 8'h9
-`define RESULTS_OUT_4 8'h10
-`define RESULTS_OUT_5 8'h11
-`define RESULTS_OUT_6 8'h12
-`define RESULTS_OUT_7 8'h13
-`define RESULTS_OUT_8 8'h14
+`include "reg_address_map.svh"
 
 module reg_file (
 	input  logic        clk,          		//  clock.clk
@@ -42,7 +25,7 @@ module reg_file (
 logic [3:0] counter; // Counter to track the current cycle of the computation
 
 // 32 32-bit registers
-logic [31:0] register [31:0];
+logic [31:0] register [15:0];
 
 // ------------- 	Reset Register	-------------
 always @(posedge clk or negedge rst_n) begin
@@ -52,10 +35,17 @@ always @(posedge clk or negedge rst_n) begin
 		avs_s0_waitrequest <= 1'b1;
 	end
 	else begin
-	
+		sys_en <= 1'b0; // Default to not enabling the systolic array
+
 		if(avs_s0_write) begin
+			// ------------- 	Systolic Ctrl Register	-------------
+			if(avs_s0_address == `SYSTOLIC_CTRL) begin
+				if(avs_s0_writedata[0]) 
+					sys_en <= 1'b1;
+			end
+				
 			// ------------- 	Matrix Input Register A	-------------
-			if(avs_s0_address == `A_IN1)
+			else if(avs_s0_address == `A_IN1)
 				register[`A_IN1]	<=  avs_s0_writedata[31:0];
 			else if(avs_s0_address == `A_IN2)
 				register[`A_IN2]	<=  avs_s0_writedata[31:0];
@@ -139,9 +129,6 @@ end
 
 
 always_comb begin
-	// Enable systolic array when not reading/writing to the register file
-	sys_en = (avs_s0_write || avs_s0_read) ? 1'b0 : 1'b1; 
-
 	// Systolic Array control logic 'a' input
 	a[0][0]  = register[`A_IN1][31:24];
 	a[0][1]  = register[`A_IN1][23:16];

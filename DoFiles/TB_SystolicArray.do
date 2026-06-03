@@ -66,9 +66,10 @@ add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_arr
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/row_val
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/col_val_reg
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/col_val
-add wave -group Systolic_Ctrl -position 17  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/a
+add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/a
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/b
 add wave -group Systolic_Ctrl -position end  -radix decimal sim:/tb_systolic_array/dut/i_ctrl/calc_out
+add wave -group Systolic_Ctrl -position end -radix decimal sim:/tb_systolic_array/dut/i_ctrl/counter
 
 
 
@@ -101,6 +102,9 @@ add wave -group PE[0][2] -radix decimal -position end  sim:/tb_systolic_array/du
 add wave -group PE[0][2] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/acc_in
 add wave -group PE[0][2] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/acc
 add wave -group PE[0][2] -radix decimal -position end  sim:/tb_systolic_array/dut/row_loop[0]/col_loop[2]/i_pe/a_out
+
+add wave -position end -radix decimal sim:/tb_systolic_array/dut/i_reg_file/register
+
 
 run -all
 
