@@ -31,7 +31,7 @@ STATE state;
 
 always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        counter     <= 0;
+        counter     <= 4'b0;
         state       <= IDLE;
         row_val_reg <= '{default:3'b0};
         col_val_reg <= '{default:3'b0};
@@ -71,16 +71,17 @@ always_ff @(posedge clk or negedge rst_n) begin
                 pe_en_reg[1] <= {1'b0, 3'b111, 1'b0};
                 pe_en_reg[2] <= {3'b111, 2'b0};
                 state <= COMPUTE;
+                counter <= 4'b0; // Reset counter for computation cycles
             end
 
             COMPUTE: begin
                 // Update row and column values and enable signals based on the current cycle
-                row_val     <= row_val_reg[counter[2:0]];
-                col_val     <= col_val_reg[counter[2:0]];
-                pe_en[0]    <= pe_en_reg[0][counter[2:0]];
-                pe_en[1]    <= pe_en_reg[1][counter[2:0]];
-                pe_en[2]    <= pe_en_reg[2][counter[2:0]];
-                counter     <= counter + 1;
+                row_val     <= row_val_reg[counter[3:0]];
+                col_val     <= col_val_reg[counter[3:0]];
+                pe_en[0]    <= pe_en_reg[0][counter[3:0]];
+                pe_en[1]    <= pe_en_reg[1][counter[3:0]];
+                pe_en[2]    <= pe_en_reg[2][counter[3:0]];
+                counter     <= counter + 4'b1;
 
                 if(counter == 4'h4) // After 4 cycles, we should have the final results ready
                     state <= OUTPUT_RESULTS;
@@ -91,7 +92,7 @@ always_ff @(posedge clk or negedge rst_n) begin
                 pe_en       <= '{default:3'b0};
                 calc_out    <= 1'b1;
                 if (counter <= 4'hF) 
-                    counter <= counter + 1;
+                    counter <= counter + 4'b1;
 
                 else
                     state   <= IDLE; // IDLE after outputting results
@@ -101,5 +102,4 @@ always_ff @(posedge clk or negedge rst_n) begin
         endcase
     end
 end
- 
 endmodule

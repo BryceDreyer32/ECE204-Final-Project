@@ -32,6 +32,7 @@ module reg_file (
 	input  logic [31:0] avs_s0_writedata,   //       .writedata
 	output logic        avs_s0_waitrequest, //       .waitrequest
 
+	output logic        sys_en,
 	input  logic 		calc_out,
 	input  logic signed [31:0] result [2:0], 
 	output logic [7:0] 	a [2:0][2:0], 
@@ -138,6 +139,9 @@ end
 
 
 always_comb begin
+	// Enable systolic array when not reading/writing to the register file
+	sys_en = (avs_s0_write || avs_s0_read) ? 1'b0 : 1'b1; 
+
 	// Systolic Array control logic 'a' input
 	a[0][0]  = register[`A_IN1][31:24];
 	a[0][1]  = register[`A_IN1][23:16];

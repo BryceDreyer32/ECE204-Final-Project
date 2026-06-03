@@ -49,6 +49,7 @@ reg_file dut(
 	.avs_s0_writedata,   //       .writedata
 	.avs_s0_waitrequest(), //       .waitrequest
 
+    .sys_en(),
 	.calc_out,
 	.result, 
 	.a, 
@@ -122,12 +123,16 @@ reg_file dut(
         avs_s0_writedata[15:8] = 8'd4;
         avs_s0_writedata[7:0] = 8'd0;
 
+        // Stop Writing, Begin Calculations
+        @(posedge clk);
+        avs_s0_write = 1'b0;
+
         // Deassert write and read A and B matricies back to verify correct loading
         repeat(2) @(posedge clk);
         avs_s0_write = 1'b0;
 
 
-        //repeat(17) @(posedge clk);
+        repeat(17) @(posedge clk);
 
         $display("Testbench completed.");
         $finish;

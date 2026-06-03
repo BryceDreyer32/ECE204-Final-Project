@@ -10,9 +10,16 @@ module systolic_array #(
     ) (
     input  logic        clk,
     input  logic        rst_n,
-    input  logic        sys_en,
-    output  logic signed [31:0] result [2:0] 
+    output  logic signed [31:0] result [2:0], 
+
+    input  logic [7:0]  avs_s0_address,     // avs_s0.address
+	input  logic        avs_s0_read,        //       .read
+	output logic [31:0] avs_s0_readdata,    //       .readdata
+	input  logic        avs_s0_write,       //       .write
+	input  logic [31:0] avs_s0_writedata,   //       .writedata
+	output logic        avs_s0_waitrequest  //       .waitrequest
 );
+
 
 logic [7:0]     row_val     [2:0];
 logic [7:0]     col_val     [2:0];
@@ -23,6 +30,7 @@ logic [7:0]     b_in        [3:0][3:0];
 logic [7:0]     a           [2:0][2:0]; 
 logic [7:0]     b           [2:0][2:0];       // 3x3 input matrices
 logic [31:0]    acc_out     [2:0][3:0];
+logic           sys_en;
 logic           calc_out;
 
 
@@ -38,6 +46,7 @@ reg_file i_reg_file(
     .avs_s0_writedata,   //       .writedata
     .avs_s0_waitrequest, //       .waitrequest
 
+    .sys_en,
     .calc_out,
     .result, 
     .a, 
