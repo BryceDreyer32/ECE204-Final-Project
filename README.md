@@ -15,5 +15,5 @@ Design verification via ModelSim. Project targets the Terasic DE10 Lite FPGA Boa
 * [Micro-architectural Specification](https://docs.google.com/document/d/1ujIqmn_fVrHngTaFdAdUgeCe9pQUw-pK5yVbcJufTcE/edit?usp=sharing)   
 
 ## Contact
-* Bryce Dreyer - dryerb@oregonstate.edu  `
+* Bryce Dreyer - dryerb@oregonstate.edu  
 * Lucas Wilson - wilsol24@oregonstate.edu  

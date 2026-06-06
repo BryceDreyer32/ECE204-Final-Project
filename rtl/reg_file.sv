@@ -24,7 +24,8 @@ module reg_file (
 
 logic [3:0] counter; // Counter to track the current cycle of the computation
 
-// 32 32-bit registers
+// 16 32-bit registers
+// Needed for reg_address_map
 logic [31:0] register [15:0];
 
 // ------------- 	Reset Register	-------------
