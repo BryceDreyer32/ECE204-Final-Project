@@ -1,5 +1,5 @@
 module pe #(
-    parameter WIDTH = 8    // Decided on 8 x 8 implementation to allow space for other Platform Designer Modules
+    parameter WIDTH = 8  
     ) (
     input  logic signed [WIDTH - 1:0] a_in, b_in,
     input  logic clk, rst_n, 
